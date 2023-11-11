@@ -5,7 +5,7 @@ services:
     build:
       context: './docker/php/'
       args:
-        PHP_VERSION: ${PHP_VERSION:-7.3}
+        PHP_VERSION: ${PHP_VERSION:-8.2}
     restart: unless-stopped
     tty: true
     environment:
@@ -16,14 +16,14 @@ services:
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - app-network
-    container_name: ${PHP_NAME}
+    container_name: ${APP}-${PHP_NAME}
 
   #Apache
   apache:
     build:
       context: './docker/apache/'
       args:
-        APACHE_VERSION: ${APACHE_VERSION:-4.2}
+        APACHE_VERSION: ${APACHE_VERSION:-2.4}
     environment:
         APACHE_ROOT_FOLDER: ${APACHE_ROOT_FOLDER}
     restart: unless-stopped
@@ -36,14 +36,14 @@ services:
       - 80:80
     volumes:
       - ./src/:/var/www/html/
-    container_name: ${APACHE_NAME}
+    container_name: ${APP}-${APACHE_NAME}
 
   #MySQL
   db:
     build:
       context: './docker/mysql/'
       args:
-          MYSQL_VERSION: ${MYSQL_VERSION:-5.7}
+          MYSQL_VERSION: ${MYSQL_VERSION:-8.0}
     restart: unless-stopped
     tty: true
     ports:
@@ -60,11 +60,11 @@ services:
       #- ./docker/mysql/dump.sql:/docker-entrypoint-initdb.d/dump.sql
     networks:
       - app-network
-    container_name: ${MYSQL_NAME}
+    container_name: ${APP}-${MYSQL_NAME}
 
   #phpmyadmin
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:${PHPMYADMIN_VERSION:-4.7}
+    image: phpmyadmin/phpmyadmin:${PHPMYADMIN_VERSION:-5.2.1}
     ports:
       - "8080:80"
     environment:
@@ -72,7 +72,7 @@ services:
       MYSQL_PASSWORD: ${DB_ROOT_PASSWORD:-supersecret}
     networks:
       - app-network
-    container_name: ${PHPMYADMIN_NAME}
+    container_name: ${APP}-${PHPMYADMIN_NAME}
 
 #Networks
 networks:
