@@ -12,7 +12,7 @@ services:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
     volumes:
-      - ./html/:/var/www/html/
+      - ./www/:/var/www/html/
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - app-network
@@ -35,7 +35,7 @@ services:
     ports:
       - ${APP_PORT:-80}:80
     volumes:
-      - ./html/:/var/www/html/
+      - ./www/:/var/www/html/
     container_name: ${APP_NAME}-${APACHE_NAME}
 
   #MySQL
